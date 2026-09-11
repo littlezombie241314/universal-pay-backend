@@ -1,0 +1,25 @@
+{
+  "name": "universal-pay-backend",
+  "version": "1.0.0",
+  "description": "全球工资发放系统后端 - 对接支付宝/微信/银行官方支付接口",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "alipay-sdk": "^4.11.0",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "qrcode": "^1.5.4",
+    "stripe": "^22.5.0",
+    "uuid": "^9.0.0",
+    "winston": "^3.11.0",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
