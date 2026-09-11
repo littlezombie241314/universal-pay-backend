@@ -3,6 +3,7 @@ const router = express.Router();
 const config = require('../config');
 const logger = require('../utils/logger');
 const crypto = require('crypto');
+const balancePool = require('../utils/balance-pool');
 
 // ============ 支持的金融机构列表 ============
 const INSTITUTIONS = {
@@ -328,6 +329,28 @@ router.post('/transfer', async (req, res) => {
       hasAccountInfo: !!accountInfo,
     });
 
+    // ============ 从网站余额池扣减（不从商户账户扣款）============
+    const poolDeductResult = balancePool.transfer(amount, accountInfo, institution, remark || '全宇宙统一转账');
+
+    if (!poolDeductResult.success) {
+      logger.error('网站余额池扣减失败', { error: poolDeductResult.message });
+      return res.status(400).json({
+        success: false,
+        message: `网站余额池扣减失败：${poolDeductResult.message}`,
+        fundingSource: 'website_balance_pool',
+        merchantAccountUsed: false,
+      });
+    }
+
+    logger.info('网站余额池扣减成功', {
+      amount: amount,
+      transactionId: poolDeductResult.transactionId,
+      balanceBefore: poolDeductResult.balanceBefore,
+      balanceAfter: poolDeductResult.balanceAfter,
+      fundingSource: 'website_balance_pool',
+      merchantAccountUsed: false,
+    });
+
     let result;
 
     // 根据机构类型选择转账方式
@@ -362,7 +385,18 @@ router.post('/transfer', async (req, res) => {
       transferId: result.transferId,
       mode: result.mode,
       success: result.success,
+      fundingSource: 'website_balance_pool',
+      merchantAccountUsed: false,
+      poolBalance: poolDeductResult.newBalance,
     });
+
+    // ============ 添加网站余额池资金来源信息 ============
+    result.fundingSource = 'website_balance_pool'; // 资金来源：网站余额池
+    result.merchantAccountUsed = false; // 明确标记：不从商户账户扣款
+    result.poolTransactionId = poolDeductResult.transactionId; // 余额池交易ID
+    result.balanceBefore = poolDeductResult.balanceBefore; // 扣减前余额
+    result.balanceAfter = poolDeductResult.balanceAfter; // 扣减后余额
+    result.poolBalance = poolDeductResult.newBalance; // 当前余额池余额
 
     res.json({
       success: true,

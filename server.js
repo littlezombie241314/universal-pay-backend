@@ -55,6 +55,7 @@ app.use('/api/global', apiKeyAuth, rateLimit(999999999, 60000), require('./route
 app.use('/api/unified-transfer', apiKeyAuth, rateLimit(999999999, 60000), require('./routes/unified-transfer'));
 app.use('/api/withdraw', apiKeyAuth, rateLimit(999999999, 60000), require('./routes/withdraw'));
 app.use('/api/qr-pay', apiKeyAuth, rateLimit(999999999, 60000), require('./routes/qr-pay'));
+app.use('/api/balance-pool', apiKeyAuth, rateLimit(999999999, 60000), require('./routes/balance-pool'));
 
 // 微信回调（不需要鉴权，有自己的签名验证）
 app.use('/api/wechat/notify', require('./routes/wechat'));
