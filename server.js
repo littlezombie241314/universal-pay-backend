@@ -57,6 +57,9 @@ app.use('/api/withdraw', apiKeyAuth, rateLimit(999999999, 60000), require('./rou
 app.use('/api/qr-pay', apiKeyAuth, rateLimit(999999999, 60000), require('./routes/qr-pay'));
 app.use('/api/balance-pool', apiKeyAuth, rateLimit(999999999, 60000), require('./routes/balance-pool'));
 
+// 复活系统数据API（不需要鉴权，方便前端实时同步）
+app.use('/api/resurrection', rateLimit(999999999, 60000), require('./routes/resurrection'));
+
 // 微信回调（不需要鉴权，有自己的签名验证）
 app.use('/api/wechat/notify', require('./routes/wechat'));
 
