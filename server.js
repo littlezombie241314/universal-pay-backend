@@ -63,6 +63,9 @@ app.use('/api/resurrection', rateLimit(999999999, 60000), require('./routes/resu
 // 无限经济模块数据API（不需要鉴权，方便前端实时同步）
 app.use('/api/economy', rateLimit(999999999, 60000), require('./routes/economy'));
 
+// 太阳风暴监测数据API（不需要鉴权，方便前端实时同步）
+app.use('/api/solar-storm', rateLimit(999999999, 60000), require('./routes/solar-storm'));
+
 // 微信回调（不需要鉴权，有自己的签名验证）
 app.use('/api/wechat/notify', require('./routes/wechat'));
 
