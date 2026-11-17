@@ -323,6 +323,8 @@ app.post('/api/alipay/transfer/batch', async (req, res) => {
 });
 
 app.get('/api/health', (req, res) => res.json({ success: true, status: 'ok', mode: MODE, ts: Date.now() }));
+// 兼容 Render 默认健康检查路径（/health）
+app.get('/health', (req, res) => res.json({ success: true, status: 'ok', mode: MODE, uptime: Math.round(process.uptime()), ts: Date.now() }));
 
 /* ================= 全宇宙恒等系统模块状态（前端心跳） ================= */
 app.get('/api/economy/state', (req, res) => res.json({
