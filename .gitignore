@@ -1,4 +1,10 @@
 node_modules/
-.env
+keys/
 *.log
-.DS_Store
+deploy_env_prod.txt
+deploy_env_prod.txt.bak*
+.env
+certs/app_private_key.pem
+keys/
+deploy_env_prod.txt*
+.env*
